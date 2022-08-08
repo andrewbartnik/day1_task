@@ -1,0 +1,37 @@
+---
+title: "stl_lead_inequity"
+format: html
+editor: visual
+---
+
+## Quarto
+```{r}
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+#read in and explore the data
+```{r}
+stl_lead <- read_csv(here::here("data", "stl_blood_lead_redone.csv")) %>% clean_names()
+
+stl_lead_prop <- stl_lead %>% clean_names() %>% mutate(prop_white = white / total_pop * 100) 
+stl_lead_prop
+```
+
+```{r}
+stl_lead_plot <- ggplot(stl_lead_prop, aes(x = pct_elevated, y = prop_white)) + geom_point()
+ggsave(here('figs', 'stl_lead_plot.jpg'), width = 6,
+       height = 5)
+stl_lead_plot
+```
+
+
+```{r}
+hist <- ggplot(stl_lead_prop, aes(x = pct_elevated, color = 'blue', alpha = 0.6)) + geom_histogram()
+
+ggsave(here('figs', 'hist.jpg'), width = 6,
+       height = 5)
+hist
+```
+
